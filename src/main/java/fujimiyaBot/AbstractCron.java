@@ -29,12 +29,14 @@ import com.google.api.services.customsearch.model.Search;
 @SuppressWarnings("serial")
 public abstract class AbstractCron extends HttpServlet{
 
-    static Logger logger = Logger.getLogger("Fujimiya"); //$NON-NLS-1$
+    static Logger logger = Logger.getLogger("Fujimiya");
     
-    static String consumerKey = Messages.getString("AbstractCron.consumerKey"); //$NON-NLS-1$
-    static String consumerSecret = Messages.getString("AbstractCron.consumerSecret"); //$NON-NLS-1$
-    static String accessToken = Messages.getString("AbstractCron.accessToken"); //$NON-NLS-1$
-    static String accessTokenSecret = Messages.getString("AbstractCron.accessTokenSecret"); //$NON-NLS-1$
+    static String consumerKey = System.getenv("consumerKey");
+    static String consumerSecret = System.getenv("consumerSecret");
+    static String accessToken = System.getenv("accessToken");
+    static String accessTokenSecret = System.getenv("accessTokenSecret");
+    static String customSearchCx = System.getenv("customSearchCx");
+    static String customSearchKey = System.getenv("customSeerchKey");
 
     static Twitter twitter;
     static Customsearch.Builder builder = new Customsearch.Builder(new NetHttpTransport(), new JacksonFactory(), null).setApplicationName("Google"); //$NON-NLS-1$
@@ -110,11 +112,11 @@ public abstract class AbstractCron extends HttpServlet{
     private Search getSearchResult(String query, int maxRankOfResult) throws IOException {
         if(maxRankOfResult>100-pageSize+1)
             maxRankOfResult=100-pageSize+1;
-        Customsearch.Cse.List list = search.cse().list(query); //$NON-NLS-1$
+        Customsearch.Cse.List list = search.cse().list(query);
         
-        list.setCx(Messages.getString("AbstractCron.cx")); //$NON-NLS-1$
-        list.setKey(Messages.getString("AbstractCron.key")); //$NON-NLS-1$
-        list.setSearchType("image"); //$NON-NLS-1$
+        list.setCx(customSearchCx);
+        list.setKey(customSearchKey);
+        list.setSearchType("image");
         list.setNum((long)pageSize);
         list.setImgSize("huge").setImgSize("large").setImgSize("medium").setImgSize("xlarge").setImgSize("xxlarge");
         
