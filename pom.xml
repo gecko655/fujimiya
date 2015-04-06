@@ -32,6 +32,29 @@
       <artifactId>quartz</artifactId>
       <version>2.1.5</version>
     </dependency>
+    <dependency>
+      <groupId>org.twitter4j</groupId>
+      <artifactId>twitter4j-core</artifactId>
+      <version>[4.0,)</version>
+    </dependency>
+    <dependency>
+	<groupId>com.google.http-client</groupId>
+	<artifactId>google-http-client</artifactId>
+	<version>1.20.0</version>
+    </dependency>
+    <dependency>
+	<groupId>com.google.http-client</groupId>
+	<artifactId>google-http-client-jackson2</artifactId>
+	<version>1.20.0</version>
+    </dependency>
+    
+    
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-customsearch</artifactId>
+      <version>v1-rev46-1.20.0</version>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>
