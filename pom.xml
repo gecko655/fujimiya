@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
   <version>1.0-SNAPSHOT</version>
-  <artifactId>helloworld</artifactId>
+  <artifactId>fujimiyaHeroku</artifactId>
   <dependencies>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
@@ -28,6 +28,11 @@
       <version>2.0.0</version>
     </dependency>
     <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+      <version>[3.0.0,)</version>
+    </dependency>
+    <dependency>
       <groupId>org.quartz-scheduler</groupId>
       <artifactId>quartz</artifactId>
       <version>2.1.5</version>
@@ -47,8 +52,6 @@
 	<artifactId>google-http-client-jackson2</artifactId>
 	<version>1.20.0</version>
     </dependency>
-    
-    
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-customsearch</artifactId>
