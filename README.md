@@ -1,33 +1,37 @@
-# java-getting-started
+fujimiya_heroku
+===========
 
-A barebones Java app, which can easily be deployed to Heroku.  
+> https://github.com/gecko655/fujimiyaBot を
+> Google App Engine から heroku へ移植中。。。
 
-This application support the [Getting Started with Java on Heroku](https://devcenter.heroku.com/articles/getting-started-with-java) article - check it out.
+> 以下、https://github.com/gecko655/fujimiyaBot からの引用
 
-## Running Locally
 
-Make sure you have Java and Maven installed.  Also, install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
+## 「わ、私... 月曜日には記憶がリセットされちゃうの...。」
 
-```sh
-$ git clone https://github.com/heroku/java-getting-started.git
-$ cd java-getting-started
-$ mvn install
-$ foreman start web
-```
+Google App Engine上で動作するTwitter Botの制御プログラムです。
+<https://twitter.com/fujimiya_monday> を動かしています。
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
+### 主な機能
 
-## Deploying to Heroku
+すべてのbot機能は、jp.gecko655.fujimiya.botの下のpackageにあります。
 
-```sh
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
+- fujimiyaBot
+ - google画像検索で「藤宮さん」を検索し、ランダムに画像をツイート
+- FujimiyaReply
+ - フォロー外からのリプライを検知すると、リプライの送信主をフォローする
+ - フォロー内からのリプライを検出すると、ランダムに画像をリプライする
+- FujimiyaRemove
+ - 月曜日の朝にフォロワーを全員リムーブし、友達のことを忘れる
+- FujimiyaLunch
+ - お昼になると、玉子焼きに関係する画像（？）をランダムにツイートする。
 
-## Documentation
 
-For more information about using Java on Heroku, see these Dev Center articles:
 
-- [Java on Heroku](https://devcenter.heroku.com/categories/java)
+> なお、TwitterAPIのconsumerKeyなどを別ファイルで保存しているため、
+このリポジトリをクローンしてもそのままでは動きません。
+
+Special Thanks: https://twitter.com/nyoro_331/status/475542674838007808
+
+なにかあれば[@gecko655](http://twitter.com/gecko655 "")まで。
 
