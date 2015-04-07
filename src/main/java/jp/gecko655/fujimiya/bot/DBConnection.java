@@ -1,5 +1,11 @@
 package jp.gecko655.fujimiya.bot;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.StreamHandler;
@@ -8,11 +14,13 @@ import org.bson.Document;
 
 import twitter4j.Status;
 
+import com.mchange.lang.ByteUtils;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.UpdateOptions;
 
 public class DBConnection {
 
@@ -23,13 +31,9 @@ public class DBConnection {
         logger.addHandler(new StreamHandler(){{setOutputStream(System.out);}});
     }
 
-    private static final MongoDatabase db;
-    static{
-        MongoClientURI mongoClientURI = new MongoClientURI(System.getenv("MONGOLAB_URI"));
-        try(MongoClient client = new MongoClient(mongoClientURI)){
-            db = client.getDatabase(mongoClientURI.getDatabase());
-        }
-    }
+    private static final MongoClientURI mongoClientURI = new MongoClientURI(System.getenv("MONGOLAB_URI"));
+    private static final MongoClient client = new MongoClient(mongoClientURI);
+    private static final MongoDatabase db = client.getDatabase(mongoClientURI.getDatabase());
     private static final String imageUrlCollectionName = "imageUrl";
     private static final String blackListCollectionName = "blackList";
     private static final String lastStatusCollectionName = "lastStatus";
@@ -67,13 +71,40 @@ public class DBConnection {
 
     public static Status getLastStatus() {
         MongoCollection<Document> lastStatusCollection = db.getCollection(lastStatusCollectionName);
-        return lastStatusCollection.find().first().get(lastStatusKey, Status.class);
+        Document doc = lastStatusCollection.find(Filters.exists(lastStatusKey)).first();
+        if(doc==null)
+            return null;
+        return fromBase64(doc.getString(lastStatusKey));
     }
 
     public static void setLastStatus(Status status) {
         MongoCollection<Document> lastStatusCollection = db.getCollection(lastStatusCollectionName);
-        Document document = new Document(lastStatusKey, status);
-        lastStatusCollection.insertOne(document);
+        Document document = new Document(lastStatusKey, toBase64(status));
+        lastStatusCollection.replaceOne(Filters.exists(lastStatusKey), document, new UpdateOptions().upsert(true));
+    }
+
+    private static String toBase64(Status status) {
+        try{
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(status);
+            return Base64.getEncoder().encodeToString(bos.toByteArray());
+        }catch(IOException e){
+            throw new Error();
+        }
+
+    }
+    
+    private static Status fromBase64(String s) {
+        try{
+            byte[] bArray = Base64.getDecoder().decode(s);
+            ByteArrayInputStream bis = new ByteArrayInputStream(bArray);
+            ObjectInputStream in = new ObjectInputStream(bis);
+            return (Status) in.readObject();
+        }catch(IOException | ClassNotFoundException e){
+            throw new Error();
+        }
+        
     }
 
 }

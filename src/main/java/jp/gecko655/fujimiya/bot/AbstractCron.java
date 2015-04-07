@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -26,8 +26,7 @@ import com.google.api.services.customsearch.Customsearch;
 import com.google.api.services.customsearch.model.Result;
 import com.google.api.services.customsearch.model.Search;
 
-@SuppressWarnings("serial")
-public abstract class AbstractCron extends HttpServlet{
+public abstract class AbstractCron implements Job{
 
     static Logger logger = Logger.getLogger("Fujimiya");
     
@@ -36,7 +35,7 @@ public abstract class AbstractCron extends HttpServlet{
     static String accessToken = System.getenv("accessToken");
     static String accessTokenSecret = System.getenv("accessTokenSecret");
     static String customSearchCx = System.getenv("customSearchCx");
-    static String customSearchKey = System.getenv("customSeerchKey");
+    static String customSearchKey = System.getenv("customSearchKey");
 
     static Twitter twitter;
     static Customsearch.Builder builder = new Customsearch.Builder(new NetHttpTransport(), new JacksonFactory(), null).setApplicationName("Google"); //$NON-NLS-1$
@@ -46,8 +45,9 @@ public abstract class AbstractCron extends HttpServlet{
         logger.setLevel(Level.FINE);
     }
     
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+    @Override
+    public void execute(JobExecutionContext context)
+            throws JobExecutionException {
         //http://twitter4j.org/ja/configuration.html
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
