@@ -1,5 +1,8 @@
 package jp.gecko655.fujimiya.bot;
 
+import java.time.ZoneId;
+import java.util.TimeZone;
+
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -14,20 +17,30 @@ public class SchedulerMain {
         scheduler = StdSchedulerFactory.getDefaultScheduler();
 
         scheduler.start();
-        setSchedule(FujimiyaReply.class, 60*5);
-        //setSchedule(FujimiyaRemove.class, 60*5);
+        setSchedule(FujimiyaReply.class, repeatSecondlyForever(60*5));
+        setSchedule(FujimiyaBot.class, repeatSecondlyForever(60*60*4));
+        setSchedule(
+                FujimiyaLunch.class, 
+                CronScheduleBuilder
+                    .dailyAtHourAndMinute(12, 25)
+                    .inTimeZone(TimeZone.getTimeZone("JST")));
+        setSchedule(
+                FujimiyaRemove.class, 
+                CronScheduleBuilder
+                    .atHourAndMinuteOnGivenDaysOfWeek(9, 0, DateBuilder.MONDAY)
+                    .inTimeZone(TimeZone.getTimeZone("JST")));
 
     }
-    private static void setSchedule(Class<? extends Job> classForExecute, int intervalSeconds) throws SchedulerException {
+    private static void setSchedule(Class<? extends Job> classForExecute, ScheduleBuilder<? extends Trigger> schedule) throws SchedulerException {
         JobDetail jobDetail = newJob(classForExecute).build();
 
         Trigger trigger = newTrigger()
                 .startNow()
-                .withSchedule(repeatSecondlyForever(intervalSeconds))
+                .withSchedule(schedule)
                 .build();
 
         scheduler.scheduleJob(jobDetail, trigger);
-        System.out.println(classForExecute.getName()+" has been scheduled in interval: "+intervalSeconds+" [s]");
+        System.out.println(classForExecute.getName()+" has been scheduled");
         
     }
 
