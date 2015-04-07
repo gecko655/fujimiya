@@ -51,7 +51,7 @@ public class DBConnection {
 
     public static void storeImageUrlToBlackList(Status reply) {
         MongoCollection<Document> imageUrlCollection = db.getCollection(imageUrlCollectionName);
-        Document imageUrlDoc = imageUrlCollection.find(Filters.eq(statusIdKey, reply.getId())).first();
+        Document imageUrlDoc = imageUrlCollection.find(Filters.eq(statusIdKey, reply.getInReplyToStatusId())).first();
         if(imageUrlDoc!=null){
             String url = imageUrlDoc.getString(urlKey);
             MongoCollection<Document> blackListCollection = db.getCollection(blackListCollectionName);
