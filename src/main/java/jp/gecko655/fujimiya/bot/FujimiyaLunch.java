@@ -2,7 +2,6 @@ package jp.gecko655.fujimiya.bot;
 
 import twitter4j.StatusUpdate;
 
-@SuppressWarnings("serial")
 public class FujimiyaLunch extends AbstractCron{
 
     @Override

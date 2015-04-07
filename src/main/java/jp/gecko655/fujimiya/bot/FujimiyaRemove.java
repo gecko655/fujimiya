@@ -5,7 +5,6 @@ import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 import twitter4j.User;
 
-@SuppressWarnings("serial")
 public class FujimiyaRemove extends AbstractCron {
 
     @Override

@@ -13,7 +13,6 @@ import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 
-@SuppressWarnings("serial")
 public class FujimiyaReply extends AbstractCron {
     
     static final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);

@@ -14,7 +14,6 @@ import org.bson.Document;
 
 import twitter4j.Status;
 
-import com.mchange.lang.ByteUtils;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
