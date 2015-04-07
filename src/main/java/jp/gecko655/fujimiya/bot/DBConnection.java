@@ -1,4 +1,4 @@
-package fujimiyaBot;
+package jp.gecko655.fujimiya.bot;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

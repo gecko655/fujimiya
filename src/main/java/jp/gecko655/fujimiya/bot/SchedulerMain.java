@@ -1,4 +1,4 @@
-package fujimiyaBot;
+package jp.gecko655.fujimiya.bot;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;

@@ -1,4 +1,4 @@
-package fujimiyaBot;
+package jp.gecko655.fujimiya.bot;
 
 import twitter4j.PagableResponseList;
 import twitter4j.StatusUpdate;

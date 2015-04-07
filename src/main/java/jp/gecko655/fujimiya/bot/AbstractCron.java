@@ -1,4 +1,4 @@
-package fujimiyaBot;
+package jp.gecko655.fujimiya.bot;
 
 import java.io.IOException;
 import java.io.InputStream;
