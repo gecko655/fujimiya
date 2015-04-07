@@ -9,7 +9,6 @@ public class TestDBConnection {
 
     @Test
     public void test() {
-        DBConnection.getLastStatus();
     }
 
 }
