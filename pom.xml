@@ -62,8 +62,14 @@
       <artifactId>junit</artifactId>
       <version>[4.12,)</version>
     </dependency>
-
   </dependencies>
+    <profiles>
+      <profile>
+       <activation>
+        <jdk>1.8</jdk>
+      </activation>
+    </profile>
+  </profiles>
   <build>
     <plugins>
       <plugin>

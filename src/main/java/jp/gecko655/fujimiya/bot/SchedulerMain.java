@@ -23,7 +23,7 @@ public class SchedulerMain {
         scheduler = StdSchedulerFactory.getDefaultScheduler();
 
         scheduler.start();
-        setSchedule(FujimiyaReply.class, repeatSecondlyForever(60*5));
+        setSchedule(FujimiyaReply.class, repeatSecondlyForever(60*2));
         setSchedule(FujimiyaBot.class, repeatSecondlyForever(60*60*4));
         setSchedule(
                 FujimiyaLunch.class, 
