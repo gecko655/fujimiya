@@ -49,15 +49,16 @@ public class DBConnection {
         collection.insertOne(doc);
     }
 
-    public static void storeImageUrlToBlackList(Status reply) {
+    public static void storeImageUrlToBlackList(long statusIdToReport, String reportedUser) {
         MongoCollection<Document> imageUrlCollection = db.getCollection(imageUrlCollectionName);
-        Document imageUrlDoc = imageUrlCollection.find(Filters.eq(statusIdKey, reply.getInReplyToStatusId())).first();
+        Document imageUrlDoc = imageUrlCollection.find(Filters.eq(statusIdKey, statusIdToReport)).first();
         if(imageUrlDoc!=null){
             String url = imageUrlDoc.getString(urlKey);
             MongoCollection<Document> blackListCollection = db.getCollection(blackListCollectionName);
             Document doc = new Document(urlKey,url);
-            doc.put(reportedUserKey, reply.getUser().getScreenName());
+            doc.put(reportedUserKey, reportedUser);
             blackListCollection.insertOne(doc);
+            logger.log(Level.INFO,"The image URL: "+url+" was stored to the black list.");
         }else{
             logger.log(Level.WARNING,"Image URL was not found in data collection");
         }

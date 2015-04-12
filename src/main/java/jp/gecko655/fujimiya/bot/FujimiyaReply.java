@@ -17,7 +17,7 @@ public class FujimiyaReply extends AbstractCron {
     
     static final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
     private static final Pattern keishouPattern = Pattern.compile("(くん|さん|君|ちゃん)$");
-    private static final Pattern whoPattern = Pattern.compile("( 誰$| だれ$|誰[^だで]|だれ[^だで]|誰だ[^と]?|だれだ[^と]?| 違う$)");
+    private static final Pattern whoPattern = Pattern.compile("( 誰$| だれ$|誰[^だで]|だれ[^だで]|誰だ[^と]?|だれだ[^と]?| 違う| ちがう)");
 
     public FujimiyaReply() {
         format.setTimeZone(TimeZone.getDefault());
@@ -26,8 +26,8 @@ public class FujimiyaReply extends AbstractCron {
     @Override
     protected void twitterCron() {
         try {
-            Status lastStatus = DBConnection.getLastStatus();
             List<Status> replies = twitter.getMentionsTimeline((new Paging()).count(20));
+            Status lastStatus = DBConnection.getLastStatus();
             DBConnection.setLastStatus(replies.get(0));
              if(lastStatus == null){
                  logger.log(Level.INFO,"memcache saved. Stop. "+replies.get(0).getUser().getName()+"'s tweet at "+format.format(replies.get(0).getCreatedAt()));
@@ -77,6 +77,19 @@ public class FujimiyaReply extends AbstractCron {
     }
 
     private void who(Status reply) {
-        DBConnection.storeImageUrlToBlackList(reply);
+        //Store the url to the black list.
+        DBConnection.storeImageUrlToBlackList(reply.getInReplyToStatusId(),reply.getUser().getScreenName());
+
+        try{
+            //Delete the reported tweet.
+            twitter.destroyStatus(reply.getInReplyToStatusId());
+            
+            //Apologize to the report user.
+            StatusUpdate update= new StatusUpdate("@"+reply.getUser().getScreenName()+" 間違えちゃった。ごめんね！");
+            update.setInReplyToStatusId(reply.getId());
+            twitter.updateStatus(update);
+        }catch(TwitterException e){
+            e.printStackTrace();
+        }
     }
 }
