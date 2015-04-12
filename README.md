@@ -1,15 +1,9 @@
 fujimiya_heroku
 ===========
 
-> https://github.com/gecko655/fujimiyaBot を
-> Google App Engine から heroku へ移植中。。。
-
-> 以下、https://github.com/gecko655/fujimiyaBot からの引用
-
-
 ## 「わ、私... 月曜日には記憶がリセットされちゃうの...。」
 
-Google App Engine上で動作するTwitter Botの制御プログラムです。
+Heroku上で動作するTwitter Botの制御プログラムです。
 <https://twitter.com/fujimiya_monday> を動かしています。
 
 ### 主な機能
@@ -19,8 +13,9 @@ Google App Engine上で動作するTwitter Botの制御プログラムです。
 - fujimiyaBot
  - google画像検索で「藤宮さん」を検索し、ランダムに画像をツイート
 - FujimiyaReply
- - フォロー外からのリプライを検知すると、リプライの送信主をフォローする
- - フォロー内からのリプライを検出すると、ランダムに画像をリプライする
+ - フォロー外からリプライを受け取ると、リプライの送信主をフォローする
+ - フォロー内からリプライを受け取ると、google画像検索で「藤宮さん」を検索し、ランダムに画像をリプライする
+ - フォロー内から「違う」などのリプライを受け取ると、リプライ先のツイートを削除して、そのツイートに含まれる画像を今後つぶやかないようにする
 - FujimiyaRemove
  - 月曜日の朝にフォロワーを全員リムーブし、友達のことを忘れる
 - FujimiyaLunch
