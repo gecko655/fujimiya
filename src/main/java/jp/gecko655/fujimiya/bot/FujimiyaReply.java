@@ -48,7 +48,11 @@ public class FujimiyaReply extends AbstractCron {
                     //auto reply (when fujimiya-san follows the replier)
                     StatusUpdate update= new StatusUpdate("@"+reply.getUser().getScreenName()+" ");
                     update.setInReplyToStatusId(reply.getId());
-                    updateStatusWithMedia(update, "藤宮香織 かわいい 一週間フレンズ。",100);
+                    if(((int) (Math.random()*10))==1){//10%
+                        updateStatusWithMedia(update, "山岸沙希 かわいい 一週間フレンズ。", 100);
+                    }else{
+                        updateStatusWithMedia(update, "藤宮香織 かわいい 一週間フレンズ。",100);
+                    }
                 }
             }
         } catch (TwitterException e) {
