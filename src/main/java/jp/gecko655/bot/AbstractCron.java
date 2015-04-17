@@ -1,4 +1,4 @@
-package jp.gecko655.fujimiya.bot;
+package jp.gecko655.bot;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,7 @@ import com.google.api.services.customsearch.model.Search;
 
 public abstract class AbstractCron implements Job{
 
-    static Logger logger = Logger.getLogger("Fujimiya");
+    static protected Logger logger = Logger.getLogger("Fujimiya");
     
     static String consumerKey = System.getenv("consumerKey");
     static String consumerSecret = System.getenv("consumerSecret");
@@ -37,7 +37,7 @@ public abstract class AbstractCron implements Job{
     static String customSearchCx = System.getenv("customSearchCx");
     static String customSearchKey = System.getenv("customSearchKey");
 
-    static Twitter twitter;
+    static protected Twitter twitter;
     static Customsearch.Builder builder = new Customsearch.Builder(new NetHttpTransport(), new JacksonFactory(), null).setApplicationName("Google"); //$NON-NLS-1$
     static Customsearch search = builder.build();
     

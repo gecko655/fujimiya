@@ -1,4 +1,4 @@
-package jp.gecko655.fujimiya.bot;
+package jp.gecko655.bot;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

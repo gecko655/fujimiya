@@ -1,10 +1,15 @@
-package jp.gecko655.fujimiya.bot;
+package jp.gecko655.bot;
 
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.repeatSecondlyForever;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 import java.util.TimeZone;
+
+import jp.gecko655.bot.fujimiya.FujimiyaBot;
+import jp.gecko655.bot.fujimiya.FujimiyaLunch;
+import jp.gecko655.bot.fujimiya.FujimiyaRemove;
+import jp.gecko655.bot.fujimiya.FujimiyaReply;
 
 import org.quartz.CronScheduleBuilder;
 import org.quartz.DateBuilder;

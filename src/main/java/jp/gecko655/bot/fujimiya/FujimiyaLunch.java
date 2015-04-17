@@ -1,5 +1,6 @@
-package jp.gecko655.fujimiya.bot;
+package jp.gecko655.bot.fujimiya;
 
+import jp.gecko655.bot.AbstractCron;
 import twitter4j.StatusUpdate;
 
 public class FujimiyaLunch extends AbstractCron{

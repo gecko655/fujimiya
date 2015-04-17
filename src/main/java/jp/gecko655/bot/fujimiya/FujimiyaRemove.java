@@ -1,5 +1,6 @@
-package jp.gecko655.fujimiya.bot;
+package jp.gecko655.bot.fujimiya;
 
+import jp.gecko655.bot.AbstractCron;
 import twitter4j.PagableResponseList;
 import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;

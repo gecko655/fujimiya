@@ -1,4 +1,4 @@
-package jp.gecko655.fujimiya.bot;
+package jp.gecko655.bot.fujimiya;
 
 
 import java.text.DateFormat;
@@ -7,6 +7,8 @@ import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
+import jp.gecko655.bot.AbstractCron;
+import jp.gecko655.bot.DBConnection;
 import twitter4j.Paging;
 import twitter4j.Relationship;
 import twitter4j.Status;
