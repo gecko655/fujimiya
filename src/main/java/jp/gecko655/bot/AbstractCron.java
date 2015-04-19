@@ -84,16 +84,22 @@ public abstract class AbstractCron implements Job{
                 Result result = items.get(i);
                 logger.log(Level.INFO,"query: " + query + " URL: "+result.getLink());
                 logger.log(Level.INFO,"page URL: "+result.getImage().getContextLink());
-                HttpURLConnection connection = (HttpURLConnection)(new URL(result.getLink())).openConnection();
-                if(DBConnection.isInBlackList(result.getLink())){
+                if(result.getImage().getWidth()+result.getImage().getHeight()<600){
+                    logger.log(Level.INFO,"Result No."+i+" is too small image. next.");
                     continue;
                 }
+                if(DBConnection.isInBlackList(result.getLink())){
+                    logger.log(Level.INFO,"Result No."+i+" is included in the blacklist. next.");
+                    continue;
+                }
+                HttpURLConnection connection = (HttpURLConnection)(new URL(result.getLink())).openConnection();
                 connection.setRequestMethod("GET");
                 connection.setInstanceFollowRedirects(false);
                 connection.connect();
                 if(connection.getResponseCode()==200){
                     return new FetchedImage(connection.getInputStream(),result.getLink());
                 }else{
+                    logger.log(Level.INFO,"Result No."+i+" occurs error while fetching the image. next.");
                     continue;
                 }
             }
@@ -118,7 +124,6 @@ public abstract class AbstractCron implements Job{
         list.setKey(customSearchKey);
         list.setSearchType("image");
         list.setNum((long)pageSize);
-        list.setImgSize("huge").setImgSize("large").setImgSize("medium").setImgSize("xlarge").setImgSize("xxlarge");
         
         long rand = (long)(Math.random()*maxRankOfResult+1);
         list.setStart(rand);
