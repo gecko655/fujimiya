@@ -28,26 +28,20 @@ import com.google.api.services.customsearch.model.Search;
 
 public abstract class AbstractCron implements Job{
 
-    static protected Logger logger = Logger.getLogger("Fujimiya");
+    static final protected Logger logger = Logger.getLogger("Fujimiya");
     
-    static String consumerKey = System.getenv("consumerKey");
-    static String consumerSecret = System.getenv("consumerSecret");
-    static String accessToken = System.getenv("accessToken");
-    static String accessTokenSecret = System.getenv("accessTokenSecret");
-    static String customSearchCx = System.getenv("customSearchCx");
-    static String customSearchKey = System.getenv("customSearchKey");
+    static final String consumerKey = System.getenv("consumerKey");
+    static final String consumerSecret = System.getenv("consumerSecret");
+    static final String accessToken = System.getenv("accessToken");
+    static final String accessTokenSecret = System.getenv("accessTokenSecret");
+    static final String customSearchCx = System.getenv("customSearchCx");
+    static final String customSearchKey = System.getenv("customSearchKey");
 
     static protected Twitter twitter;
-    static Customsearch.Builder builder = new Customsearch.Builder(new NetHttpTransport(), new JacksonFactory(), null).setApplicationName("Google"); //$NON-NLS-1$
-    static Customsearch search = builder.build();
+    static Customsearch search;
     
     public AbstractCron() {
         logger.setLevel(Level.FINE);
-    }
-    
-    @Override
-    public void execute(JobExecutionContext context)
-            throws JobExecutionException {
         //http://twitter4j.org/ja/configuration.html
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -56,6 +50,13 @@ public abstract class AbstractCron implements Job{
             .setOAuthConsumerKey(consumerKey)
             .setOAuthConsumerSecret(consumerSecret);
         twitter = new TwitterFactory(cb.build()).getInstance();
+        Customsearch.Builder builder = new Customsearch.Builder(new NetHttpTransport(), new JacksonFactory(), null).setApplicationName("Google"); //$NON-NLS-1$
+        search = builder.build();
+    }
+    
+    @Override
+    public void execute(JobExecutionContext context)
+            throws JobExecutionException {
         twitterCron();
     }
 
@@ -80,8 +81,8 @@ public abstract class AbstractCron implements Job{
             //Get SearchResult
             Search search = getSearchResult(query, maxRankOfResult);
             List<Result> items = search.getItems();
-            for(int i=0;i<10;i++){
-                Result result = items.get(i);
+            for(Result result: items){
+                int i = items.indexOf(result);
                 logger.log(Level.INFO,"query: " + query + " URL: "+result.getLink());
                 logger.log(Level.INFO,"page URL: "+result.getImage().getContextLink());
                 if(result.getImage().getWidth()+result.getImage().getHeight()<600){
@@ -114,19 +115,19 @@ public abstract class AbstractCron implements Job{
         return null;
 }
     
+    static private int apiLimit = 10;
     static private int pageSize = 10;
     private Search getSearchResult(String query, int maxRankOfResult) throws IOException {
-        if(maxRankOfResult>100-pageSize+1)
-            maxRankOfResult=100-pageSize+1;
+        if(maxRankOfResult>apiLimit-pageSize+1)
+            maxRankOfResult=apiLimit-pageSize+1;
         Customsearch.Cse.List list = search.cse().list(query);
         
-        list.setCx(customSearchCx);
-        list.setKey(customSearchKey);
-        list.setSearchType("image");
-        list.setNum((long)pageSize);
-        
         long rand = (long)(Math.random()*maxRankOfResult+1);
-        list.setStart(rand);
+        list.setCx(customSearchCx)
+            .setKey(customSearchKey)
+            .setSearchType("image")
+            .setNum((long)pageSize)
+            .setStart(rand);
         logger.log(Level.INFO,"rand: "+rand);
         return list.execute();
     }
