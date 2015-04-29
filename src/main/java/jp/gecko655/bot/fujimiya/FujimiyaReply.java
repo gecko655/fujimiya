@@ -29,8 +29,12 @@ public class FujimiyaReply extends AbstractCron {
     protected void twitterCron() {
         try {
             List<Status> replies = twitter.getMentionsTimeline((new Paging()).count(20));
-            Status lastStatus = DBConnection.getLastStatus();
+            if(replies.isEmpty()){
+                logger.log(Level.INFO, "Not yet replied. Stop.");
+                return;
+            }
             DBConnection.setLastStatus(replies.get(0));
+            Status lastStatus = DBConnection.getLastStatus();
              if(lastStatus == null){
                  logger.log(Level.INFO,"memcache saved. Stop. "+replies.get(0).getUser().getName()+"'s tweet at "+format.format(replies.get(0).getCreatedAt()));
                  return;
