@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import jp.gecko655.bot.AbstractCron;
 import jp.gecko655.bot.DBConnection;
@@ -28,21 +29,20 @@ public class FujimiyaReply extends AbstractCron {
     @Override
     protected void twitterCron() {
         try {
-            List<Status> replies = twitter.getMentionsTimeline((new Paging()).count(20));
+            Status lastStatus = DBConnection.getLastStatus();
+            List<Status> replies = twitter.getMentionsTimeline((new Paging()).count(20))
+                    .stream().filter(reply -> !isOutOfDate(reply, lastStatus)).collect(Collectors.toList());
             if(replies.isEmpty()){
-                logger.log(Level.INFO, "Not yet replied. Stop.");
+                logger.log(Level.FINE, "Not yet replied. Stop.");
                 return;
             }
             DBConnection.setLastStatus(replies.get(0));
-            Status lastStatus = DBConnection.getLastStatus();
              if(lastStatus == null){
                  logger.log(Level.INFO,"memcache saved. Stop. "+replies.get(0).getUser().getName()+"'s tweet at "+format.format(replies.get(0).getCreatedAt()));
                  return;
              }
             
             for(Status reply : replies){
-                if(isOutOfDate(reply, lastStatus))
-                    break;
                 Relationship relation = twitter.friendsFollowers().showFriendship(twitter.getId(), reply.getUser().getId());
                 
                 if(!relation.isSourceFollowingTarget()){
@@ -68,11 +68,9 @@ public class FujimiyaReply extends AbstractCron {
     }
 
     private boolean isOutOfDate(Status reply, Status lastStatus) {
-        if(reply.getCreatedAt().getTime()-lastStatus.getCreatedAt().getTime()<=0){
-            logger.log(Level.INFO, reply.getUser().getName()+"'s tweet at "+format.format(reply.getCreatedAt()) +" is out of date");
-            return true;
-        }
-        return false;
+        if(lastStatus==null) return false;
+        return reply.getCreatedAt().before(lastStatus.getCreatedAt())
+                ||reply.getCreatedAt().equals(lastStatus.getCreatedAt());
     }
 
     private void followBack(Status reply) throws TwitterException {
