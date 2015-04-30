@@ -69,8 +69,7 @@ public class FujimiyaReply extends AbstractCron {
 
     private boolean isOutOfDate(Status reply, Status lastStatus) {
         if(lastStatus==null) return false;
-        return reply.getCreatedAt().before(lastStatus.getCreatedAt())
-                ||reply.getCreatedAt().equals(lastStatus.getCreatedAt());
+        return !reply.getCreatedAt().after(lastStatus.getCreatedAt());
     }
 
     private void followBack(Status reply) throws TwitterException {
