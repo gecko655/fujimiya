@@ -115,7 +115,7 @@ public abstract class AbstractCron implements Job{
         return null;
 }
     
-    static private int apiLimit = 10;
+    static private int apiLimit = 100;
     static private int pageSize = 10;
     private Search getSearchResult(String query, int maxRankOfResult) throws IOException {
         if(maxRankOfResult>apiLimit-pageSize+1)
