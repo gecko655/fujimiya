@@ -31,7 +31,7 @@ public class FujimiyaReply extends AbstractCron {
         try {
             Status lastStatus = DBConnection.getLastStatus();
             List<Status> replies = twitter.getMentionsTimeline((new Paging()).count(20))
-                    .stream().filter(reply -> !isOutOfDate(reply, lastStatus)).collect(Collectors.toList());
+                    .stream().filter(reply -> isValid(reply, lastStatus)).collect(Collectors.toList());
             if(replies.isEmpty()){
                 logger.log(Level.FINE, "Not yet replied. Stop.");
                 return;
@@ -67,9 +67,9 @@ public class FujimiyaReply extends AbstractCron {
         }
     }
 
-    private boolean isOutOfDate(Status reply, Status lastStatus) {
+    private boolean isValid(Status reply, Status lastStatus) {
         if(lastStatus==null) return false;
-        return !reply.getCreatedAt().after(lastStatus.getCreatedAt());
+        return reply.getCreatedAt().after(lastStatus.getCreatedAt());
     }
 
     private void followBack(Status reply) throws TwitterException {
