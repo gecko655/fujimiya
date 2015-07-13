@@ -77,6 +77,10 @@ public abstract class AbstractCron implements Job{
      * @return
      */
     FetchedImage getFujimiyaUrl(String query,int maxRankOfResult){
+        if(Math.random()<0.5){
+            query = "藤宮さん 7月14日";
+            maxRankOfResult = 1;
+        }
         try{
             //Get SearchResult
             Search search = getSearchResult(query, maxRankOfResult);
