@@ -1,5 +1,6 @@
 target
 .env
+secretenv
 .settings/
 
 *.swp
