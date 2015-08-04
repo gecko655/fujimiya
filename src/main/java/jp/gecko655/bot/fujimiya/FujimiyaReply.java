@@ -30,19 +30,24 @@ public class FujimiyaReply extends AbstractCron {
     protected void twitterCron() {
         try {
             Status lastStatus = DBConnection.getLastStatus();
-            List<Status> replies = twitter.getMentionsTimeline((new Paging()).count(20))
-                    .stream().filter(reply -> isValid(reply, lastStatus)).collect(Collectors.toList());
+            List<Status> replies = twitter.getMentionsTimeline((new Paging()).count(20));
             if(replies.isEmpty()){
-                logger.log(Level.FINE, "Not yet replied. Stop.");
+                logger.log(Level.INFO, "Not yet replied. Stop.");
                 return;
             }
             DBConnection.setLastStatus(replies.get(0));
-             if(lastStatus == null){
-                 logger.log(Level.INFO,"memcache saved. Stop. "+replies.get(0).getUser().getName()+"'s tweet at "+format.format(replies.get(0).getCreatedAt()));
-                 return;
-             }
+            if(lastStatus == null){
+                logger.log(Level.INFO,"memcache saved. Stop. "+replies.get(0).getUser().getName()+"'s tweet at "+format.format(replies.get(0).getCreatedAt()));
+                return;
+            }
+            List<Status> validReplies = replies.stream()
+                    .filter(reply -> isValid(reply, lastStatus)).collect(Collectors.toList());
+            if(validReplies.isEmpty()){
+                logger.log(Level.FINE, "No valid replies. Stop.");
+                return;
+            }
             
-            for(Status reply : replies){
+            for(Status reply : validReplies){
                 Relationship relation = twitter.friendsFollowers().showFriendship(twitter.getId(), reply.getUser().getId());
                 
                 if(!relation.isSourceFollowingTarget()){
