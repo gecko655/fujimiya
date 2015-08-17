@@ -85,7 +85,8 @@ public class FujimiyaReply extends AbstractCron {
         }
         StatusUpdate update= new StatusUpdate("@"+reply.getUser().getScreenName()+" もしかして、あなたが"+userName+"？");
         update.setInReplyToStatusId(reply.getId());
-        twitter.updateStatus(update);
+        Status status = twitter.updateStatus(update);
+        logger.log(Level.INFO, "Successfully tweeted and followed back. "+status.getText());
     }
 
     private void who(Status reply) {
