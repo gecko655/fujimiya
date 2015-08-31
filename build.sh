@@ -1,1 +1,1 @@
-docker build -t hestia .
+docker build -t fujimiya .
