@@ -2,6 +2,8 @@ package jp.gecko655.bot.fujimiya;
 
 
 import java.text.DateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -74,6 +76,7 @@ public class FujimiyaReply extends AbstractCron {
 
     private boolean isValid(Status reply, Status lastStatus) {
         if(lastStatus==null) return false;
+        if(Duration.between(reply.getCreatedAt().toInstant(), LocalDateTime.now()).toHours()>12) return false;
         return reply.getCreatedAt().after(lastStatus.getCreatedAt());
     }
 
