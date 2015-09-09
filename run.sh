@@ -1,1 +1,1 @@
-docker run -d --name fujimiya --env-file secretenv fujimiya 
+docker run -d --name gecko655/fujimiya --env-file secretenv fujimiya 
