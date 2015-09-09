@@ -1,9 +1,9 @@
-fujimiya_heroku
+fujimiya
 ===========
 
 ## 「わ、私... 月曜日には記憶がリセットされちゃうの...。」
 
-Heroku上で動作するTwitter Botの制御プログラムです。
+Heroku及びDocker上で動作するTwitter Botの制御プログラムです。
 <https://twitter.com/fujimiya_monday> を動かしています。
 
 ### 主な機能
@@ -20,11 +20,6 @@ Heroku上で動作するTwitter Botの制御プログラムです。
  - 月曜日の朝にフォロワーを全員リムーブし、友達のことを忘れる
 - FujimiyaLunch
  - お昼になると、玉子焼きに関係する画像（？）をランダムにツイートする。
-
-
-
-> なお、TwitterAPIのconsumerKeyなどを別ファイルで保存しているため、
-このリポジトリをクローンしてもそのままでは動きません。
 
 Special Thanks: https://twitter.com/nyoro_331/status/475542674838007808
 
