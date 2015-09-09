@@ -1,1 +1,1 @@
-docker run `cat secretenv | sed -e 's/^/-e /'` env -t fujimiya 
+docker run -d --name fujimiya --env-file secretenv fujimiya 
