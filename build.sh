@@ -1,1 +1,1 @@
-docker build -t fujimiya .
+docker build -t gecko655/fujimiya .
