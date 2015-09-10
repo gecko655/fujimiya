@@ -26,8 +26,11 @@ public class DBConnection {
     private static final Logger logger;
     static{
         logger = Logger.getLogger(DBConnection.class.getName());
+        logger.log(Level.INFO, "a");
         logger.setUseParentHandlers(false);
+        logger.log(Level.INFO, "b");
         logger.addHandler(new StreamHandler(){{setOutputStream(System.out);}});
+        logger.log(Level.INFO, "c");
     }
 
     private static final MongoClientURI mongoClientURI = new MongoClientURI(System.getenv("MONGOLAB_URI"));
@@ -57,7 +60,6 @@ public class DBConnection {
             MongoCollection<Document> blackListCollection = db.getCollection(blackListCollectionName);
             Document doc = new Document(urlKey,url);
             doc.put(reportedUserKey, reportedUser);
-            logger.log(Level.INFO,"The image URL: "+url+" was stored to the black list.2");
             blackListCollection.insertOne(doc);
             logger.log(Level.INFO,"The image URL: "+url+" was stored to the black list.");
         }else{
