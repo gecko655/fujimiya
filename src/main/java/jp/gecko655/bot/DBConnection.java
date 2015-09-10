@@ -57,6 +57,7 @@ public class DBConnection {
             MongoCollection<Document> blackListCollection = db.getCollection(blackListCollectionName);
             Document doc = new Document(urlKey,url);
             doc.put(reportedUserKey, reportedUser);
+            logger.log(Level.INFO,"The image URL: "+url+" was stored to the black list.2");
             blackListCollection.insertOne(doc);
             logger.log(Level.INFO,"The image URL: "+url+" was stored to the black list.");
         }else{
