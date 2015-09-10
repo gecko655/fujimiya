@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.StreamHandler;
 
 import org.bson.Document;
 
@@ -23,12 +22,7 @@ import com.mongodb.client.model.UpdateOptions;
 
 public class DBConnection {
 
-    private static final Logger logger;
-    static{
-        logger = Logger.getLogger(DBConnection.class.getName());
-        logger.setUseParentHandlers(false);
-        logger.addHandler(new StreamHandler(){{setOutputStream(System.out);}});
-    }
+    private static final Logger logger = Logger.getLogger(DBConnection.class.getName());
 
     private static final MongoClientURI mongoClientURI = new MongoClientURI(System.getenv("MONGOLAB_URI"));
     private static final MongoClient client = new MongoClient(mongoClientURI);
