@@ -52,10 +52,12 @@ public class FujimiyaReply extends AbstractCron {
             
             for(Status reply : validReplies){
                 Relationship relation = twitter.friendsFollowers().showFriendship(twitter.getId(), reply.getUser().getId());
-                
-                if(!relation.isSourceFollowingTarget()){
+                if(!relation.isSourceFollowingTarget()&&!(twitter.getId()==reply.getUser().getId())){
                     followBack(reply);
-                }else if(whoPattern.matcher(reply.getText()).find()){
+                }else if(whoPattern.matcher(reply.getText()).find()//The reply has 誰 format
+                        &&reply.getInReplyToStatusId()>0//The reply replies to a specific tweet.
+                        &&twitter.showStatus(reply.getInReplyToStatusId()).getMediaEntities().length>0){
+                            //The specific tweet has at least 1 media entry
                     // put latest image URL to black-list
                     who(reply);    
                 }else{
