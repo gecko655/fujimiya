@@ -87,8 +87,13 @@ public class FujimiyaReply extends AbstractCron {
     }
 
     private void followBack(Status reply) throws TwitterException {
-        twitter.createFriendship(reply.getUser().getId());
         String userName = reply.getUser().getName();
+        if (userName.contains("@")){
+            StatusUpdate update = new StatusUpdate("@" + reply.getUser().getScreenName() + " その名前やめろ");
+            update.setInReplyToStatusId(reply.getId());
+            twitter.updateStatus(update);
+        }
+        twitter.createFriendship(reply.getUser().getId());
         if(!keishouPattern.matcher(userName).find()){
             userName = userName + "くん";
         }
