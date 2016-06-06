@@ -92,6 +92,7 @@ public class FujimiyaReply extends AbstractCron {
             StatusUpdate update = new StatusUpdate("@" + reply.getUser().getScreenName() + " その名前やめろ");
             update.setInReplyToStatusId(reply.getId());
             twitter.updateStatus(update);
+            return;
         }
         twitter.createFriendship(reply.getUser().getId());
         if(!keishouPattern.matcher(userName).find()){
