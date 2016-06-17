@@ -88,7 +88,7 @@ public class FujimiyaReply extends AbstractCron {
 
     private void followBack(Status reply) throws TwitterException {
         String userName = reply.getUser().getName();
-        if (userName.contains("@")){
+        if (Pattern.matches("@[A-Za-z]", userName)){
             StatusUpdate update = new StatusUpdate("@" + reply.getUser().getScreenName() + " その名前やめろ");
             update.setInReplyToStatusId(reply.getId());
             twitter.updateStatus(update);
